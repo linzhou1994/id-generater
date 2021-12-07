@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.id.generater.dao.SceneDao">
+    <resultMap id="BaseResultMap" type="com.id.generater.model.Scene">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="scene_key" jdbcType="VARCHAR" property="sceneKey"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="generator_step" jdbcType="BIGINT" property="generatorStep"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , scene_key, app_id, generator_step, `type`, gmt_create
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_scene
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from tb_scene
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.id.generater.model.Scene"
+            useGeneratedKeys="true">
+        insert into tb_scene (scene_key, app_id, generator_step,
+                              `type`, gmt_create)
+        values (#{sceneKey,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{generatorStep,jdbcType=BIGINT},
+                #{type,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.id.generater.model.Scene"
+            useGeneratedKeys="true">
+        insert into tb_scene
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sceneKey != null">
+                scene_key,
+            </if>
+            <if test="appId != null">
+                app_id,
+            </if>
+            <if test="generatorStep != null">
+                generator_step,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sceneKey != null">
+                #{sceneKey,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null">
+                #{appId,jdbcType=VARCHAR},
+            </if>
+            <if test="generatorStep != null">
+                #{generatorStep,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.id.generater.model.Scene">
+        update tb_scene
+        <set>
+            <if test="sceneKey != null">
+                scene_key = #{sceneKey,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null">
+                app_id = #{appId,jdbcType=VARCHAR},
+            </if>
+            <if test="generatorStep != null">
+                generator_step = #{generatorStep,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.id.generater.model.Scene">
+        update tb_scene
+        set scene_key      = #{sceneKey,jdbcType=VARCHAR},
+            app_id         = #{appId,jdbcType=VARCHAR},
+            generator_step = #{generatorStep,jdbcType=BIGINT},
+            `type`         = #{type,jdbcType=TINYINT},
+            gmt_create     = #{gmtCreate,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="findBySceneKeys" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_scene
+        where scene_key in
+        <foreach collection="list" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </select>
+</mapper>
